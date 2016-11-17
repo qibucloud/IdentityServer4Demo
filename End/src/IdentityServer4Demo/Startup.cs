@@ -1,13 +1,10 @@
-﻿// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
-// Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
-
-using IdentityServer4;
+﻿using IdentityServer4;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Serilog;
 
-namespace QuickstartIdentityServer
+namespace IdentityServer4Demo
 {
     public class Startup
     {
@@ -15,24 +12,30 @@ namespace QuickstartIdentityServer
         {
             services.AddMvc();
 
-            // configure identity server with in-memory stores, keys, clients and scopes
-            services.AddDeveloperIdentityServer()
-                .AddInMemoryScopes(Config.GetScopes())
+            services.AddIdentityServer()
+                .AddInMemoryScopes(Config.GetScope())
                 .AddInMemoryClients(Config.GetClients())
-                .AddInMemoryUsers(Config.GetUsers());
+                .AddInMemoryUsers(Config.GetUsers())
+                .AddSigningCredential("CN=sts");
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
         {
-            loggerFactory.AddConsole(LogLevel.Debug);
+            var serilog = new LoggerConfiguration()
+                .MinimumLevel.Information()
+                .Enrich.FromLogContext()
+                .WriteTo.LiterateConsole(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message}{NewLine}{Exception}{NewLine}")
+                .CreateLogger();
+
+            loggerFactory.AddSerilog(serilog);
             app.UseDeveloperExceptionPage();
 
             app.UseIdentityServer();
 
+            // cookie middleware for temporarily storing the outcome of the external authentication
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
                 AuthenticationScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme,
-
                 AutomaticAuthenticate = false,
                 AutomaticChallenge = false
             });
@@ -40,9 +43,7 @@ namespace QuickstartIdentityServer
             app.UseGoogleAuthentication(new GoogleOptions
             {
                 AuthenticationScheme = "Google",
-                DisplayName = "Google",
                 SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme,
-
                 ClientId = "434483408261-55tc8n0cs4ff1fe21ea8df2o443v2iuc.apps.googleusercontent.com",
                 ClientSecret = "3gcoTrEDPPJ0ukn_aYYT6PWo"
             });

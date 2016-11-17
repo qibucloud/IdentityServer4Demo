@@ -7,10 +7,10 @@
   "dependencies": {
     "Microsoft.NETCore.App": {
       "type": "platform",
-      "version": "1.0.0"
+      "version": "1.0.1"
     },
 
-    "IdentityModel": "2.0.0"
+    "IdentityModel": "2.0.1"
   },
 
   "frameworks": {
