@@ -1,9 +1,6 @@
 ﻿using IdentityServer4.Models;
 using IdentityServer4.Services.InMemory;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace IdentityServer4Demo
 {
@@ -41,6 +38,7 @@ namespace IdentityServer4Demo
                 new Client
                 {
                     ClientId = "mvc",
+                    ClientName = "MVC Client",
                     AllowedGrantTypes = GrantTypes.Hybrid,
 
                     ClientSecrets = { new Secret("secret".Sha256()) },
