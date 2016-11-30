@@ -13,10 +13,11 @@ namespace IdentityServer4Demo
             services.AddMvc();
 
             services.AddIdentityServer()
-                .AddInMemoryScopes(Config.GetScope())
+                .AddTemporarySigningCredential()
+                .AddInMemoryApiResources(Config.GetApis())
+                .AddInMemoryIdentityResources(Config.GetIdentityResources())
                 .AddInMemoryClients(Config.GetClients())
-                .AddInMemoryUsers(Config.GetUsers())
-                .AddSigningCredential("CN=sts");
+                .AddInMemoryUsers(Config.GetUsers());
         }
 
         public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
@@ -40,6 +41,7 @@ namespace IdentityServer4Demo
                 AutomaticChallenge = false
             });
 
+            // middleware for google authentication
             app.UseGoogleAuthentication(new GoogleOptions
             {
                 AuthenticationScheme = "Google",

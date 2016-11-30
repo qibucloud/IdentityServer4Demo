@@ -1,23 +1,29 @@
 ﻿using IdentityServer4.Models;
 using IdentityServer4.Services.InMemory;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace IdentityServer4Demo
 {
     public class Config
     {
-        public static IEnumerable<Scope> GetScope()
+        public static IEnumerable<ApiResource> GetApis()
         {
-            return new List<Scope>
+            return new List<ApiResource>
             {
-                StandardScopes.OpenId,
-                StandardScopes.Profile,
+                new ApiResource("api1", "My API #1")
+            };
+        }
 
-                new Scope
-                {
-                    Name = "api1",
-                    DisplayName = "My API #1"
-                }
+        public static IEnumerable<IdentityResource> GetIdentityResources()
+        {
+            return new List<IdentityResource>
+            {
+                new IdentityResources.OpenId(),
+                new IdentityResources.Profile()
             };
         }
 
@@ -28,22 +34,21 @@ namespace IdentityServer4Demo
                 new Client
                 {
                     ClientId = "client",
+                    ClientSecrets = { new Secret("secret".Sha256() )},
+
                     AllowedGrantTypes = GrantTypes.ClientCredentials,
-
-                    ClientSecrets = { new Secret("secret".Sha256()) },
-
                     AllowedScopes = { "api1" }
                 },
 
                 new Client
                 {
                     ClientId = "mvc",
-                    ClientName = "MVC Client",
-                    AllowedGrantTypes = GrantTypes.Hybrid,
+                    ClientName = "MVC application",
 
                     ClientSecrets = { new Secret("secret".Sha256()) },
-
                     RedirectUris = { "http://localhost:5001/signin-oidc" },
+
+                    AllowedGrantTypes = GrantTypes.Hybrid,
                     AllowedScopes = { "openid", "profile", "api1" }
                 }
             };
@@ -61,8 +66,9 @@ namespace IdentityServer4Demo
 
                     Claims =
                     {
-                        new System.Security.Claims.Claim("name", "Bob Smith")
+                        new Claim("name", "Bob Smith")
                     }
+
                 }
             };
         }

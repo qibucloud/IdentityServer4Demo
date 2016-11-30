@@ -22,8 +22,8 @@ namespace Api
             {
                 Authority = "http://localhost:5000",
                 RequireHttpsMetadata = false,
-
-                ScopeName = "api1"
+            
+                AllowedScopes = { "api1" }
             });
 
             app.UseMvc();
