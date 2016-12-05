@@ -14,7 +14,7 @@
     "Serilog.Sinks.Literate": "2.0.0",
     "Serilog.Extensions.Logging": "1.2.0",
 
-    "IdentityServer4": "1.0.0-rc4"
+    "IdentityServer4": "1.0.0-rc4-update1"
   },
 
   "tools": {

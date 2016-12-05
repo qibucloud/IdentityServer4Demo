@@ -49,7 +49,8 @@ namespace MvcClient
 
                 ResponseType = "code id_token",
                 Scope = { "openid", "profile", "api1" },
-                SaveTokens = true
+                SaveTokens = true,
+                GetClaimsFromUserInfoEndpoint = true
             });
 
             app.UseStaticFiles();
