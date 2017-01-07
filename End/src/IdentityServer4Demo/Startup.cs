@@ -1,4 +1,5 @@
 ﻿using IdentityServer4;
+using IdentityServer4.Quickstart.UI;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -17,7 +18,7 @@ namespace IdentityServer4Demo
                 .AddInMemoryApiResources(Config.GetApis())
                 .AddInMemoryIdentityResources(Config.GetIdentityResources())
                 .AddInMemoryClients(Config.GetClients())
-                .AddInMemoryUsers(Config.GetUsers());
+                .AddTestUsers(TestUsers.Users);
         }
 
         public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
@@ -46,8 +47,8 @@ namespace IdentityServer4Demo
             {
                 AuthenticationScheme = "Google",
                 SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme,
-                ClientId = "434483408261-55tc8n0cs4ff1fe21ea8df2o443v2iuc.apps.googleusercontent.com",
-                ClientSecret = "3gcoTrEDPPJ0ukn_aYYT6PWo"
+                ClientId = "708996912208-9m4dkjb5hscn7cjrn5u0r4tbgkbj1fko.apps.googleusercontent.com",
+                ClientSecret = "wdfPY6t8H8cecgjlxud__4Gh"
             });
 
             app.UseStaticFiles();

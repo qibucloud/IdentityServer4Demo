@@ -4,7 +4,7 @@
       "version": "1.1.0",
       "type": "platform"
     },
-    "IdentityServer4.AccessTokenValidation": "1.0.1-rc4",
+    "IdentityServer4.AccessTokenValidation": "1.0.2",
     "Microsoft.AspNetCore.Diagnostics": "1.1.0",
     "Microsoft.AspNetCore.Mvc.Core": "1.1.0",
     "Microsoft.AspNetCore.Mvc.Formatters.Json": "1.1.0",
