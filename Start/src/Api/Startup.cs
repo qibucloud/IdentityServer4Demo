@@ -6,6 +6,11 @@ namespace Api
 {
     public class Startup
     {
+        public Startup(ILoggerFactory loggerFactory)
+        {
+            loggerFactory.AddConsole(LogLevel.Information);
+        }
+
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvcCore()
@@ -15,7 +20,6 @@ namespace Api
 
         public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
         {
-            loggerFactory.AddConsole(LogLevel.Trace);
             app.UseDeveloperExceptionPage();
 
             app.UseMvc();
