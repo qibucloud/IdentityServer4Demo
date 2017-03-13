@@ -4,12 +4,18 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 
 namespace MvcClient
 {
     public class Startup
     {
+        public Startup(ILoggerFactory loggerFactory)
+        {
+            loggerFactory.AddConsole(LogLevel.Information);
+        }
+
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc(options =>
@@ -24,9 +30,6 @@ namespace MvcClient
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            loggerFactory.AddConsole(LogLevel.Information);
-
-            loggerFactory.AddDebug();
             app.UseDeveloperExceptionPage();
 
             app.UseCookieAuthentication(new CookieAuthenticationOptions
@@ -50,7 +53,13 @@ namespace MvcClient
                 ResponseType = "code id_token",
                 Scope = { "openid", "profile", "api1" },
                 SaveTokens = true,
-                GetClaimsFromUserInfoEndpoint = true
+                GetClaimsFromUserInfoEndpoint = true,
+
+                TokenValidationParameters = new TokenValidationParameters
+                {
+                    NameClaimType = "name",
+                    RoleClaimType = "role"
+                }
             });
 
             app.UseStaticFiles();

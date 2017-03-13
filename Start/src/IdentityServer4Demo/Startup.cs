@@ -7,12 +7,7 @@ namespace IdentityServer4Demo
 {
     public class Startup
     {
-        public void ConfigureServices(IServiceCollection services)
-        {
-            services.AddMvc();
-        }
-
-        public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
+        public Startup(ILoggerFactory loggerFactory)
         {
             var serilog = new LoggerConfiguration()
                 .MinimumLevel.Information()
@@ -21,6 +16,15 @@ namespace IdentityServer4Demo
                 .CreateLogger();
 
             loggerFactory.AddSerilog(serilog);
+        }
+
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddMvc();
+        }
+
+        public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
+        {
             app.UseDeveloperExceptionPage();
 
             app.UseStaticFiles();

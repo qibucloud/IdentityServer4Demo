@@ -9,6 +9,17 @@ namespace IdentityServer4Demo
 {
     public class Startup
     {
+        public Startup(ILoggerFactory loggerFactory)
+        {
+            var serilog = new LoggerConfiguration()
+                .MinimumLevel.Information()
+                .Enrich.FromLogContext()
+                .WriteTo.LiterateConsole(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message}{NewLine}{Exception}{NewLine}")
+                .CreateLogger();
+
+            loggerFactory.AddSerilog(serilog);
+        }
+
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
@@ -23,26 +34,10 @@ namespace IdentityServer4Demo
 
         public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
         {
-            var serilog = new LoggerConfiguration()
-                .MinimumLevel.Information()
-                .Enrich.FromLogContext()
-                .WriteTo.LiterateConsole(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message}{NewLine}{Exception}{NewLine}")
-                .CreateLogger();
-
-            loggerFactory.AddSerilog(serilog);
             app.UseDeveloperExceptionPage();
 
             app.UseIdentityServer();
 
-            // cookie middleware for temporarily storing the outcome of the external authentication
-            app.UseCookieAuthentication(new CookieAuthenticationOptions
-            {
-                AuthenticationScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme,
-                AutomaticAuthenticate = false,
-                AutomaticChallenge = false
-            });
-
-            // middleware for google authentication
             app.UseGoogleAuthentication(new GoogleOptions
             {
                 AuthenticationScheme = "Google",

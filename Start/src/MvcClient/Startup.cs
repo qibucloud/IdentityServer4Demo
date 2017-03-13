@@ -9,6 +9,11 @@ namespace MvcClient
 {
     public class Startup
     {
+        public Startup(ILoggerFactory loggerFactory)
+        {
+            loggerFactory.AddConsole(LogLevel.Information);
+        }
+
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc(options =>
@@ -21,11 +26,8 @@ namespace MvcClient
             });
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app)
         {
-            loggerFactory.AddConsole(LogLevel.Information);
-
-            loggerFactory.AddDebug();
             app.UseDeveloperExceptionPage();
 
             app.UseCookieAuthentication(new CookieAuthenticationOptions
